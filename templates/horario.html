@@ -13,5 +13,21 @@
         <input type="text" name="materia" placeholder="Materia">
         <button type="submit">Ok!</button>
     </form>
+    <table border="1">
+        <tr>
+            <th>Día Semana</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Materia</th>
+        </tr>
+        {% for schedule in schedules %}
+            <tr>
+                <td>{{ schedule.dia_semana }}</td>
+                <td>{{ schedule.hora_inicio }}</td>
+                <td>{{ schedule.hora_fin }}</td>
+                <td>{{ schedule.materia }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

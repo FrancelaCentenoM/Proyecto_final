@@ -11,5 +11,16 @@
         <input type="text" name="content" placeholder="content" required>
         <button type="submit">Submit</button>
     </form>
+    {% for anotacion in anotaciones %}
+    <tr>
+        <td>{{ anotacion.titulo }}</td>
+        <td>{{ anotacion.contenido }}</td>
+        <td>
+            <form method="post" action="{{ url_for('eliminar_anotacion', anotacion_id=anotacion.id) }}">
+                <button type="submit">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+{% endfor %}
 </body>
 </html>

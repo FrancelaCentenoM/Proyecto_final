@@ -29,5 +29,17 @@
         <br>
         <button type="submit">Agregar Calificación</button>
     </form>
+    <table border="1">
+        <tr>
+            <th>Materia</th>
+            <th>Calificación</th>
+        </tr>
+        {% for calificacion in calificaciones %}
+            <tr>
+                <td>{{ calificacion.materia }}</td>
+                <td>{{ calificacion.calificacion }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>

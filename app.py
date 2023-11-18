@@ -125,10 +125,17 @@ def horario():
             return "error"
         if not request.form.get("materia"):
             return "error"
+        
+        existing_schedule = db.execute("SELECT * FROM Horario WHERE user_id = :user_id AND dia_semana = :dia_semana AND hora_inicio = :hora_inicio",
+        user_id=session["user_id"], dia_semana=request.form.get("dia_semana"), hora_inicio=request.form.get("hora_inicio"))
+
+        if existing_schedule:
+            return "error"
         horarios=db.execute("INSERT INTO Horario (dia_semana, hora_inicio, hora_fin, materia, user_id) VALUES (:dia_semana,:hora_inicio, :hora_fin, :materia, :user_id)", dia_semana=request.form.get("dia_semana"), hora_inicio=request.form.get("hora_inicio"),hora_fin=request.form.get("hora_fin"), materia=request.form.get("materia"), user_id=session["user_id"])
-        return "yei"
-    else:
-        return render_template("horario.html")
+    user_schedules = db.execute("SELECT * FROM Horario WHERE user_id = :user_id", user_id=session["user_id"])
+
+    # Render the template with the user's schedules
+    return render_template("horario.html", schedules=user_schedules)
 
 
 # Ruta para ingresar calificaciones
@@ -140,8 +147,7 @@ def calificaciones():
         calificacion = request.form.get("calificacion")
 
         if not materia_id or not calificacion:
-            flash("Por favor, completa todos los campos.", "error")
-            return redirect("/calificaciones")
+            return "error"
 
         # Verificar si ya existe una calificación para la materia seleccionada
         existing_calificacion = db.execute("SELECT id FROM calificaciones WHERE materia_id = :materia_id AND user_id = :user_id",
@@ -160,7 +166,11 @@ def calificaciones():
         # Obtener la lista de materias del horario del usuario
         materias = db.execute("SELECT id, materia FROM horario WHERE user_id = :user_id", user_id=session["user_id"])
 
-        return render_template("calificaciones.html", materias=materias)
+       # Obtener las calificaciones del usuario
+        calificaciones = db.execute("SELECT c.calificacion, h.materia FROM calificaciones c JOIN horario h ON c.materia_id = h.id WHERE c.user_id = :user_id",
+        user_id=session["user_id"])
+
+        return render_template("calificaciones.html", materias=materias, calificaciones=calificaciones)
 
 
 #Ruta para anotaciones
@@ -173,9 +183,23 @@ def anotaciones():
         if not request.form.get("content"):
             return "error"
         notitas=db.execute("INSERT INTO anotaciones (titulo, contenido, user_id) VALUES (:titulo, :contenido, :user_id)", titulo=request.form.get("title"), contenido=request.form.get("content"), user_id=session["user_id"])
-        return "bien"
-    else:
-        return render_template("anotaciones.html")
+    anotaciones = db.execute("SELECT id, titulo, contenido FROM anotaciones WHERE user_id = :user_id", user_id=session["user_id"])
+    return render_template("anotaciones.html", anotaciones=anotaciones)
+
+
+#Ruta para borrar anotaciones
+@app.route("/eliminar_anotacion/<int:anotacion_id>", methods=["POST"])
+@login_required
+def eliminar_anotacion(anotacion_id):
+    # Obtener la anotación a eliminar
+    anotacion = db.execute("SELECT * FROM anotaciones WHERE id = :anotacion_id AND user_id = :user_id",
+    anotacion_id=anotacion_id, user_id=session["user_id"])
+
+    if anotacion:
+        # Eliminar la anotación
+        db.execute("DELETE FROM anotaciones WHERE id = :anotacion_id", anotacion_id=anotacion_id)
+
+    return redirect("/anotaciones")
 
 
 #Ruta para la lista de tareas
