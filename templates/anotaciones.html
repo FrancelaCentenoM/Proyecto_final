@@ -3,24 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Anotaciones</title>
+
+    <!--Style de la barra de navegación-->
+    <style>
+        body {
+           font-family: 'Arial', sans-serif;
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+           background-color: #f8f9fa;
+       }
+       nav {
+           background-color: #343a40;
+           padding: 15px;
+           text-align: center;
+           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+       }
+   
+       nav ul {
+           list-style: none;
+           margin: 0;
+           padding: 0;
+       }
+   
+       nav ul li {
+           display: inline-block;
+           margin-right: 20px;
+           transition: transform 0.3s ease-in-out;
+       }
+   
+       nav ul li a {
+           text-decoration: none;
+           color: #ffffff;
+           font-weight: bold;
+           font-size: 16px;
+           padding: 10px 15px;
+           border-radius: 5px;
+           transition: background-color 0.3s, transform 0.3s ease-in-out;
+       }
+   
+       nav ul li a:hover {
+           background-color: #495057;
+           transform: scale(1.1);
+       }
+   </style>
+
+    <style>
+        section {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    
+        form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #343a40;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .anotacion-container {
+            border: 1px solid #343a40;
+            border-radius: 8px;
+            margin: 10px 0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .anotacion-content {
+            flex: 1;
+        }
+    
+        .eliminar-btn {
+            background-color: #dc3545;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <form action="/anotaciones" method="post">
-        <input type="text" name="title" placeholder="title" required>
-        <input type="text" name="content" placeholder="content" required>
-        <button type="submit">Submit</button>
-    </form>
-    {% for anotacion in anotaciones %}
-    <tr>
-        <td>{{ anotacion.titulo }}</td>
-        <td>{{ anotacion.contenido }}</td>
-        <td>
-            <form method="post" action="{{ url_for('eliminar_anotacion', anotacion_id=anotacion.id) }}">
-                <button type="submit">Eliminar</button>
-            </form>
-        </td>
-    </tr>
-{% endfor %}
+    <!-- Barra de Navegación -->
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/horario">Horario</a></li>
+            <li><a href="/tareas">Tareas</a></li>
+            <li><a href="/calificaciones">Calificaciones</a></li>
+            <li><a href="/anotaciones">Anotaciones</a></li>
+            <li><a href="/logout">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenido de Anotaciones -->
+    <section>
+        <h2>Anotaciones</h2>
+        <form action="/anotaciones" method="post">
+            <input type="text" name="title" placeholder="title" required>
+            <input type="text" name="content" placeholder="content" required>
+            <button type="submit">Guardar</button>
+        </form>
+
+        {% for anotacion in anotaciones %}
+            <div class="anotacion-container">
+                <div class="anotacion-content">
+                    <p><strong>{{ anotacion.titulo }}</strong></p>
+                    <p>{{ anotacion.contenido }}</p>
+                </div>
+                <form method="post" action="{{ url_for('eliminar_anotacion', anotacion_id=anotacion.id) }}">
+                    <button class="eliminar-btn" type="submit">Eliminar</button>
+                </form>
+            </div>
+        {% endfor %}
+    </section>
 </body>
 </html>

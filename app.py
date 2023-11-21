@@ -99,7 +99,7 @@ def register():
 
         session["user_id"] = rows[0]["id"]
 
-        return redirect("/")
+        return redirect("/login")
 
     else:
         return render_template("register.html")
@@ -109,7 +109,7 @@ def register():
 @app.route("/logout")
 def logout():
     session.clear()
-    return "adios"
+    return redirect("/login")
 
 
 #Ruta para el horario de clases
@@ -213,7 +213,7 @@ def tareas():
         return redirect("/tareas")
 
     tasks = db.execute("SELECT * FROM tasks WHERE user_id = :user_id", user_id=session["user_id"])
-    return render_template("pendientes.html", tasks=tasks)
+    return render_template("tareas.html", tasks=tasks)
 
 #Para las tareas que ya estan completadas
 @app.route("/complete_task/<int:task_id>")

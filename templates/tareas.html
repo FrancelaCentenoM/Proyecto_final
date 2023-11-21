@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
-
+    <title>Mis Tareas</title>
     <!--Style de la barra de navegación-->
     <style>
-         body {
+        body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -20,19 +19,19 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-    
+       
         nav ul {
-            list-style: none;
+              list-style: none;
             margin: 0;
             padding: 0;
         }
-    
+       
         nav ul li {
             display: inline-block;
             margin-right: 20px;
             transition: transform 0.3s ease-in-out;
         }
-    
+       
         nav ul li a {
             text-decoration: none;
             color: #ffffff;
@@ -42,34 +41,16 @@
             border-radius: 5px;
             transition: background-color 0.3s, transform 0.3s ease-in-out;
         }
-    
+       
         nav ul li a:hover {
             background-color: #495057;
             transform: scale(1.1);
         }
     </style>
     
-    <!--Style propio de la pestaña-->
-    <style>
-        section {
-            padding: 40px;
-            background-color: #ffffff;
-            margin: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2 {
-            color: #343a40;
-        }
-
-        p {
-            color: #6c757d;
-        }
-    </style>
 </head>
-<body>
 
+<body>
     <!-- Barra de Navegación -->
     <nav>
         <ul>
@@ -82,10 +63,34 @@
         </ul>
     </nav>
 
-    <!-- Contenido Principal -->
-    <section id="inicio">
-        <h1>Bienvenido a Tu Sitio</h1>
-        <p>Contenido de la página de inicio.</p>
+    
+
+    <!-- Contenido de Tareas -->
+    <section>
+        <h2>Tareas Pendientes</h2>
+        <form method="post" action="/tareas">
+            <label for="task_content">Nueva tarea:</label>
+            <input type="text" id="task_content" name="task_content" required>
+            <button type="submit">Agregar tarea</button>
+        </form>
+        <ul>
+            {% for task in tasks %}
+            <li class="{% if task.completed %}completed{% endif %}">
+                <span>{{ task.content }}</span>
+                <a href="{{ url_for('complete_task', task_id=task.id) }}">[Completar]</a>
+                <a href="{{ url_for('delete_task', task_id=task.id) }}">[Eliminar]</a>
+            </li>
+            {% endfor %}
+        </ul>
     </section>
 </body>
+
 </html>
+
+
+
+
+
+
+
+
