@@ -13,7 +13,7 @@ body {
 .container {
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(135deg, #153677, #4e085f);
+    background: linear-gradient(135deg, #7bee97, #d964f7);
     padding: 10px;
     display: flex;
     justify-content: center;
@@ -71,7 +71,7 @@ button {
     outline: none;
     padding: 15px 50px;
     border-radius: 30px;
-    background-color: #ff5945;
+    background-color: #000000;
     color: #fff;
     font-size: 18px;
     transition: all .25s ease;
@@ -94,8 +94,6 @@ ul {
 
 ul li {
     font-size: 17px;
-    padding: 12px 8px 12px 50px;
-    margin-top: 5px;
     user-select: none;
     cursor: pointer;
     position: relative;
@@ -108,7 +106,7 @@ ul li::before {
     height: 24px;
     border-radius: 50%;
     left: 0;
-    border: 2px solid #ff5945;
+
 }
 
 ul .checked {
