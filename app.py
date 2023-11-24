@@ -34,11 +34,11 @@ def login():
     if request.method == "POST":
         # Ensure username was submitted
         if not request.form.get("username"):
-            return "error"
+            return redirect("/")
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return "error"
+            return redirect("/")
 
         # Query database for username
         rows = db.execute(
@@ -49,7 +49,7 @@ def login():
         if len(rows) != 1 or not check_password_hash(
             rows[0]["password"], request.form.get("password")
         ):
-            return "error"
+            return redirect("/")
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -68,24 +68,24 @@ def register():
     """Register user"""
     session.clear()
     if request.method == "POST":
-        if not request.form.get("username"):
-            return "error"
+        if not request.form.get("new_username"):
+            return redirect("/register")
 
-        elif not request.form.get("password"):
-            return "error"
+        elif not request.form.get("new_password"):
+            return redirect("/register")
 
         elif not request.form.get("confirmation"):
-            return "error"
+            return redirect("/register")
 
         elif request.form.get("password") != request.form.get("confirmation"):
-            return "error"
+            return redirect("/register")
 
         rows = db.execute(
             "SELECT * FROM users WHERE username=?", request.form.get("username")
         )
 
         if len(rows) != 0:
-           return "error"
+           return redirect("/register")
 
         db.execute(
             "INSERT INTO users (username, password) VALUES(?, ?)",
@@ -118,19 +118,19 @@ def logout():
 def horario():
     if request.method=="POST":
         if not request.form.get("dia_semana"):
-            return "error"
+            return redirect("/horario")
         if not request.form.get("hora_inicio"):
-            return "error"
+            return redirect("/horario")
         if not request.form.get("hora_fin"):
-            return "error"
+            return redirect("/horario")
         if not request.form.get("materia"):
-            return "error"
+            return redirect("/horario")
         
         existing_schedule = db.execute("SELECT * FROM Horario WHERE user_id = :user_id AND dia_semana = :dia_semana AND hora_inicio = :hora_inicio",
         user_id=session["user_id"], dia_semana=request.form.get("dia_semana"), hora_inicio=request.form.get("hora_inicio"))
 
         if existing_schedule:
-            return "error"
+            return redirect("/horario")
         horarios=db.execute("INSERT INTO Horario (dia_semana, hora_inicio, hora_fin, materia, user_id) VALUES (:dia_semana,:hora_inicio, :hora_fin, :materia, :user_id)", dia_semana=request.form.get("dia_semana"), hora_inicio=request.form.get("hora_inicio"),hora_fin=request.form.get("hora_fin"), materia=request.form.get("materia"), user_id=session["user_id"])
     user_schedules = db.execute("SELECT * FROM Horario WHERE user_id = :user_id", user_id=session["user_id"])
 
@@ -146,29 +146,42 @@ def calificaciones():
         materia_id = request.form.get("materia_id")
         calificacion = request.form.get("calificacion")
 
+        # Validar que se ingresen valores para materia_id y calificacion
         if not materia_id or not calificacion:
-            return "error"
+            return redirect("/calificaciones")
+
+        try:
+            # Intentar convertir la calificacion a un número decimal
+            calificacion = float(calificacion)
+        except ValueError:
+            # Manejar la excepción si no se puede convertir a un número
+            return redirect("/calificaciones")
+
+        # Validar el rango de la calificación (de 0 a 100)
+        if not 0 <= calificacion <= 100:
+            return redirect("/calificaciones")
 
         # Verificar si ya existe una calificación para la materia seleccionada
         existing_calificacion = db.execute("SELECT id FROM calificaciones WHERE materia_id = :materia_id AND user_id = :user_id",
         materia_id=materia_id, user_id=session["user_id"])
 
         if existing_calificacion:
-            return "error"
+            return redirect("/calificaciones")
 
+        # Insertar la nueva calificación en la base de datos
         db.execute("INSERT INTO calificaciones (materia_id, calificacion, user_id) VALUES (:materia_id, :calificacion, :user_id)",
-        materia_id=materia_id, calificacion=calificacion, user_id=session["user_id"])
+                   materia_id=materia_id, calificacion=calificacion, user_id=session["user_id"])
 
-        flash("Calificación agregada correctamente", "success")
         return redirect("/calificaciones")
 
     else:
         # Obtener la lista de materias del horario del usuario
         materias = db.execute("SELECT id, materia FROM horario WHERE user_id = :user_id", user_id=session["user_id"])
 
-       # Obtener las calificaciones del usuario
-        calificaciones = db.execute("SELECT c.calificacion, h.materia FROM calificaciones c JOIN horario h ON c.materia_id = h.id WHERE c.user_id = :user_id",
-        user_id=session["user_id"])
+        # Obtener las calificaciones del usuario
+        calificaciones = db.execute(
+            "SELECT c.calificacion, h.materia FROM calificaciones c JOIN horario h ON c.materia_id = h.id WHERE c.user_id = :user_id",
+            user_id=session["user_id"])
 
         return render_template("calificaciones.html", materias=materias, calificaciones=calificaciones)
 
@@ -179,9 +192,9 @@ def calificaciones():
 def anotaciones():
     if request.method=="POST":
         if not request.form.get("title"):
-            return "error"
+            return redirect("/anotaciones")
         if not request.form.get("content"):
-            return "error"
+            return redirect("/anotaciones")
         notitas=db.execute("INSERT INTO anotaciones (titulo, contenido, user_id) VALUES (:titulo, :contenido, :user_id)", titulo=request.form.get("title"), contenido=request.form.get("content"), user_id=session["user_id"])
     anotaciones = db.execute("SELECT id, titulo, contenido FROM anotaciones WHERE user_id = :user_id", user_id=session["user_id"])
     return render_template("anotaciones.html", anotaciones=anotaciones)
@@ -203,33 +216,12 @@ def eliminar_anotacion(anotacion_id):
 
 
 #Ruta para la lista de tareas
-@app.route("/tareas", methods=["GET", "POST"])
+@app.route("/tareas")
 @login_required
 def tareas():
-    if request.method == "POST":
-        task_content = request.form.get("task_content")
-        db.execute("INSERT INTO tasks (content, user_id) VALUES (:content, :user_id)", content=task_content, user_id=session["user_id"])
-        flash("Tarea agregada correctamente", "success")
-        return redirect("/tareas")
+    return render_template("tareas.html")
 
-    tasks = db.execute("SELECT * FROM tasks WHERE user_id = :user_id", user_id=session["user_id"])
-    return render_template("tareas.html", tasks=tasks)
 
-#Para las tareas que ya estan completadas
-@app.route("/complete_task/<int:task_id>")
-@login_required
-def complete_task(task_id):
-    db.execute("UPDATE tasks SET completed = 1 WHERE id = :task_id", task_id=task_id)
-    flash("Tarea completada correctamente", "success")
-    return redirect("/tareas")
-
-#Para borrar las tareas
-@app.route("/delete_task/<int:task_id>")
-@login_required
-def delete_task(task_id):
-    db.execute("DELETE FROM tasks WHERE id = :task_id", task_id=task_id)
-    flash("Tarea eliminada correctamente", "success")
-    return redirect("/tareas")
 
 
 

@@ -1,0 +1,67 @@
+section {
+    padding: 40px;
+    background-color: #ffffff;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+}
+
+form {
+    max-width: 400px;
+    margin: 20px auto;  /* Alinea el formulario al centro horizontal */
+    padding: 20px;
+    background-color: #ADF6EF;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+form label,
+form select,
+form input {
+    display: block;
+    margin-bottom: 15px;
+    width: 100%;  /* Ajusta el ancho al 100% para ocupar todo el contenedor */
+    box-sizing: border-box;  /* Incluye el padding y el borde en el ancho total */
+}
+
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #C4ADF6;
+    color: #000000;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table,
+th,
+td {
+    border: 1px solid #343a40;
+}
+
+th,
+td {
+    padding: 15px;
+    text-align: center;
+}
+
+th {
+    background-color: #ADF6EF;
+    color: #000000;
+}
+
+
+

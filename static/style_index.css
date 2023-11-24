@@ -1,0 +1,28 @@
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* O ajusta la altura según tus necesidades */
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px);
+    }
+    60% {
+        transform: translateY(-15px);
+    }
+}
+
+.animated-letters {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #EFB288; /* Cambia el color según sea necesario */
+    animation: bounce 2s infinite;
+    text-align: center; /* Alinea el texto al centro */
+}
+

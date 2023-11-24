@@ -1,91 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Tareas</title>
-    <!--Style de la barra de navegación-->
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f8f9fa;
-        }
-        nav {
-            background-color: #343a40;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-       
-        nav ul {
-              list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-       
-        nav ul li {
-            display: inline-block;
-            margin-right: 20px;
-            transition: transform 0.3s ease-in-out;
-        }
-       
-        nav ul li a {
-            text-decoration: none;
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 16px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s ease-in-out;
-        }
-       
-        nav ul li a:hover {
-            background-color: #495057;
-            transform: scale(1.1);
-        }
-    </style>
-    
+    <title>MyPlanner</title>
+    <link rel="stylesheet" href="/static/style_navbar.css">
+    <link rel="stylesheet" href="/static/style_tareas.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 </head>
 
 <body>
     <!-- Barra de Navegación -->
-    <nav>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/horario">Horario</a></li>
-            <li><a href="/tareas">Tareas</a></li>
-            <li><a href="/calificaciones">Calificaciones</a></li>
-            <li><a href="/anotaciones">Anotaciones</a></li>
-            <li><a href="/logout">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
-
-    
+    <ul class="nav-links">
+        <li><a href="/">Inicio</a></li>
+        <li class="center"><a href="/horario">Horario</a></li>
+        <li class="upward"><a href="/calificaciones">Calificaciones</a></li>
+        <li class="forward"><a href="/anotaciones">Anotaciones</a></li>
+        <li class="forward"><a href="/tareas">Tareas</a></li>
+        <li class="forward"><a href="/logout">Cerrar sesión</a></li>
+        <li><img class="logo" src="/static/alely1.png" alt="hola" width="90px" height="auto"></li>
+    </ul>
 
     <!-- Contenido de Tareas -->
-    <section>
-        <h2>Tareas Pendientes</h2>
-        <form method="post" action="/tareas">
-            <label for="task_content">Nueva tarea:</label>
-            <input type="text" id="task_content" name="task_content" required>
-            <button type="submit">Agregar tarea</button>
-        </form>
-        <ul>
-            {% for task in tasks %}
-            <li class="{% if task.completed %}completed{% endif %}">
-                <span>{{ task.content }}</span>
-                <a href="{{ url_for('complete_task', task_id=task.id) }}">[Completar]</a>
-                <a href="{{ url_for('delete_task', task_id=task.id) }}">[Eliminar]</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </section>
+    <div class="container">
+        <div class="todo-app">
+            <div class="app-title">
+                <h2>To-do app</h2>
+                <i class="fa-solid fa-book-bookmark"></i>
+            </div>
+            <div class="row">
+                <input type="text" id="input-box" placeholder="Agregar tareas">
+                <button>Agregar</button>
+            </div>
+            <ul id="list-container"></ul>
+        </div>
+    </div>
+
+    <script>
+        const inputBox = document.getElementById("input-box");
+        const button = document.querySelector("button");
+        const list = document.getElementById("list-container");
+
+        function addTask() {
+            if (inputBox.value === '') {
+                alert("¡Debes escribir algo!");
+            } else {
+                let li = document.createElement("li");
+                li.innerHTML = inputBox.value;
+                list.appendChild(li);
+                inputBox.value = '';
+                let span = document.createElement("span");
+                span.innerHTML = "x";
+                li.appendChild(span);
+            }
+            saveData();
+        }
+
+        list.addEventListener("click", (e) => {
+            if (e.target.tagName === "LI") {
+                e.target.classList.toggle("checked");
+                saveData();
+            } else if (e.target.tagName === "SPAN") {
+                e.target.parentElement.remove();
+                saveData();
+            }
+        });
+
+        button.addEventListener("click", addTask);
+
+        function saveData() {
+            localStorage.setItem("data", list.innerHTML);
+        }
+
+        function showTask() {
+            const savedData = localStorage.getItem("data");
+            if (savedData) {
+                list.innerHTML = savedData;
+            }
+        }
+
+        window.addEventListener("load", showTask);
+    </script>
 </body>
 
 </html>
+
 
 
 

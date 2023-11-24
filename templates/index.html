@@ -3,89 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
-
-    <!--Style de la barra de navegación-->
-    <style>
-         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f8f9fa;
-        }
-        nav {
-            background-color: #343a40;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-    
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-    
-        nav ul li {
-            display: inline-block;
-            margin-right: 20px;
-            transition: transform 0.3s ease-in-out;
-        }
-    
-        nav ul li a {
-            text-decoration: none;
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 16px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s ease-in-out;
-        }
-    
-        nav ul li a:hover {
-            background-color: #495057;
-            transform: scale(1.1);
-        }
-    </style>
-    
-    <!--Style propio de la pestaña-->
-    <style>
-        section {
-            padding: 40px;
-            background-color: #ffffff;
-            margin: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2 {
-            color: #343a40;
-        }
-
-        p {
-            color: #6c757d;
-        }
-    </style>
+    <title>MyPlanner</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/static/style_navbar.css">
+    <link rel="stylesheet" href="/static/style_footer.css">
+    <link rel="stylesheet" href="/static/style_index.css">
 </head>
 <body>
 
     <!-- Barra de Navegación -->
-    <nav>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/horario">Horario</a></li>
-            <li><a href="/tareas">Tareas</a></li>
-            <li><a href="/calificaciones">Calificaciones</a></li>
-            <li><a href="/anotaciones">Anotaciones</a></li>
-            <li><a href="/logout">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
+    <ul class="nav-links">
+        <li><a href="/">Inicio</a></li>
+        <li class="center"><a href="/horario">Horario</a></li>
+        <li class="upward"><a href="/calificaciones">Calificaciones</a></li>
+        <li class="forward"><a href="/anotaciones">Anotaciones</a></li>
+        <li class="forward"><a href="/tareas">Tareas</a></li>
+        <li class="forward"><a href="/logout">Cerrar sesión</a></li>
+        
+        <li><img class="logo" src="/static/alely1.png" alt="hola" width="90px" height="auto"></li>
+    </ul>
 
     <!-- Contenido Principal -->
     <section id="inicio">
-        <h1>Bienvenido a Tu Sitio</h1>
-        <p>Contenido de la página de inicio.</p>
+        <div class="animated-letters">
+            <p>Bienvenido a MyPlanner!</p>
+            <p>Aquí encontrarás todas las herramientas para una mejor organización con tus estudios.</p>
+        </div>
     </section>
+
+    
+
 </body>
+<footer>
+    <div>
+        <h3>¿Quiénes somos?</h3>
+        <p>Estudiantes de cs50 y cursamos la carrera de ingeniería en computación</p>
+    </div>
+    <div>
+        <h3>Contacto</h3>
+        <p>Aracelly Castillo <a href="mailto:aracellycastillo1302@gmail.com">Enviar correo</a></p>
+        <p>Francela Centeno <a href="mailto:centenoalejan10@gmail.com">Enviar correo</a></p>
+    </div>
+</footer>
 </html>
+
+
+
