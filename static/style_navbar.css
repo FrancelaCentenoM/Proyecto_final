@@ -22,7 +22,6 @@ body {
     background: transparent;
     padding: 5px 10px;
     border-radius: 12px;
-    position: sticky;
     top: 0;
     z-index: 100;
     margin-top: 20px;
@@ -33,6 +32,10 @@ body {
     margin: 0 12px;
 }
 
+.nav-links2 {
+    position: fixed;
+
+}
 .nav-links li a {
     position: relative;
     color: #bf37ec;

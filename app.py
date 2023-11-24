@@ -63,46 +63,43 @@ def login():
 
 
 #Ruta del registro
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/register", methods=["POST"])
 def register():
     """Register user"""
     session.clear()
-    if request.method == "POST":
-        if not request.form.get("new_username"):
-            return redirect("/register")
-
-        elif not request.form.get("new_password"):
-            return redirect("/register")
-
-        elif not request.form.get("confirmation"):
-            return redirect("/register")
-
-        elif request.form.get("password") != request.form.get("confirmation"):
-            return redirect("/register")
-
-        rows = db.execute(
-            "SELECT * FROM users WHERE username=?", request.form.get("username")
-        )
-
-        if len(rows) != 0:
-           return redirect("/register")
-
-        db.execute(
-            "INSERT INTO users (username, password) VALUES(?, ?)",
-            request.form.get("username"),
-            generate_password_hash(request.form.get("password")),
-        )
-
-        rows = db.execute(
-            "SELECT * FROM users WHERE username=?", request.form.get("username")
-        )
-
-        session["user_id"] = rows[0]["id"]
-
+    # if request.method == "POST":
+    if not request.form.get("new_username"):
         return redirect("/login")
 
-    else:
-        return render_template("register.html")
+    elif not request.form.get("new_password"):
+        return redirect("/login")
+
+    elif not request.form.get("confirmation"):
+        return redirect("/login")
+
+    elif request.form.get("new_password") != request.form.get("confirmation"):
+        return redirect("/login")
+    
+    rows = db.execute(
+        "SELECT * FROM users WHERE username=?", request.form.get("new_username")
+    )
+
+    if len(rows) != 0:
+        return redirect("/login")
+
+    db.execute(
+        "INSERT INTO users (username, password) VALUES(?, ?)",
+        request.form.get("new_username"),
+        generate_password_hash(request.form.get("new_password")),
+    )
+
+    rows = db.execute(
+        "SELECT * FROM users WHERE username=?", request.form.get("new_username")
+    )
+
+    session["user_id"] = rows[0]["id"]
+
+    return redirect("/login")
 
 
 #Ruta para cerrar sesion
