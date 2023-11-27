@@ -1,73 +1,75 @@
 from cs50 import SQL
+import regex
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import login_required
 
-app=Flask(__name__)
+app = Flask(__name__)
 
-# Configure session to use filesystem (instead of signed cookies)
+# Configurar la sesión para usar el sistema de archivos (en lugar de cookies firmadas)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Configure CS50 Library to use SQLite database
+# Configurar la biblioteca CS50 para usar la base de datos SQLite
 db = SQL("sqlite:///database.db")
 
 
-# Ruta de la pestaña principal
+# Ruta para la pestaña principal
 @app.route("/")
 @login_required
 def index():
     return render_template("index.html")
 
 
-#Ruta del login
+# Ruta para el inicio de sesión
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """Log user in"""
+    """Iniciar sesión del usuario"""
 
-    # Forget any user_id
+    # Olvidar cualquier user_id
     session.clear()
 
-    # User reached route via POST (as by submitting a form via POST)
+    # El usuario llegó a la ruta a través de POST (al enviar un formulario por POST)
     if request.method == "POST":
-        # Ensure username was submitted
+        # Asegurarse de que se haya enviado un nombre de usuario
         if not request.form.get("username"):
             return redirect("/")
 
-        # Ensure password was submitted
+        # Asegurarse de que se haya enviado una contraseña
         elif not request.form.get("password"):
             return redirect("/")
 
-        # Query database for username
+        # Consultar la base de datos para obtener el nombre de usuario
         rows = db.execute(
             "SELECT * FROM users WHERE username = ?", request.form.get("username")
         )
 
-        # Ensure username exists and password is correct
+        # Asegurarse de que el nombre de usuario exista y la contraseña sea correcta
         if len(rows) != 1 or not check_password_hash(
             rows[0]["password"], request.form.get("password")
         ):
             return redirect("/")
 
-        # Remember which user has logged in
+        # Recordar qué usuario ha iniciado sesión
         session["user_id"] = rows[0]["id"]
 
-        # Redirect user to home page
+        # Redirigir al usuario a la página de inicio
         return redirect("/")
 
-    # User reached route via GET (as by clicking a link or via redirect)
+    # El usuario llegó a la ruta a través de GET (al hacer clic en un enlace o redirección)
     else:
         return render_template("login.html")
 
 
-#Ruta del registro
+# Ruta para el registro de usuarios
 @app.route("/register", methods=["POST"])
 def register():
-    """Register user"""
+    """Registrar usuario"""
     session.clear()
-    # if request.method == "POST":
+
+    # Verificar si se han enviado los campos necesarios
     if not request.form.get("new_username"):
         return redirect("/login")
 
@@ -79,7 +81,16 @@ def register():
 
     elif request.form.get("new_password") != request.form.get("confirmation"):
         return redirect("/login")
-    
+
+    elif not validate_password(request.form.get("new_password")):
+        return redirect("/login")
+
+    # Validar el nombre de usuario
+    new_username = request.form.get("new_username")
+    if len(new_username) < 8 or not any(char.isdigit() for char in new_username):
+        return "error"
+
+    # Verificar si el nombre de usuario ya existe
     rows = db.execute(
         "SELECT * FROM users WHERE username=?", request.form.get("new_username")
     )
@@ -87,33 +98,34 @@ def register():
     if len(rows) != 0:
         return redirect("/login")
 
+    # Insertar el nuevo usuario en la base de datos
     db.execute(
         "INSERT INTO users (username, password) VALUES(?, ?)",
         request.form.get("new_username"),
         generate_password_hash(request.form.get("new_password")),
     )
 
+    # Iniciar sesión con el nuevo usuario
     rows = db.execute(
         "SELECT * FROM users WHERE username=?", request.form.get("new_username")
     )
-
     session["user_id"] = rows[0]["id"]
 
     return redirect("/login")
 
 
-#Ruta para cerrar sesion
+# Ruta para cerrar sesión
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/login")
 
 
-#Ruta para el horario de clases
+# Ruta para el horario de clases
 @app.route("/horario", methods=["GET", "POST"])
 @login_required
 def horario():
-    if request.method=="POST":
+    if request.method == "POST":
         if not request.form.get("dia_semana"):
             return redirect("/horario")
         if not request.form.get("hora_inicio"):
@@ -122,16 +134,29 @@ def horario():
             return redirect("/horario")
         if not request.form.get("materia"):
             return redirect("/horario")
-        
-        existing_schedule = db.execute("SELECT * FROM Horario WHERE user_id = :user_id AND dia_semana = :dia_semana AND hora_inicio = :hora_inicio",
-        user_id=session["user_id"], dia_semana=request.form.get("dia_semana"), hora_inicio=request.form.get("hora_inicio"))
+
+        existing_schedule = db.execute(
+            "SELECT * FROM Horario WHERE user_id = :user_id AND dia_semana = :dia_semana AND hora_inicio = :hora_inicio",
+            user_id=session["user_id"],
+            dia_semana=request.form.get("dia_semana"),
+            hora_inicio=request.form.get("hora_inicio"),
+        )
 
         if existing_schedule:
             return redirect("/horario")
-        horarios=db.execute("INSERT INTO Horario (dia_semana, hora_inicio, hora_fin, materia, user_id) VALUES (:dia_semana,:hora_inicio, :hora_fin, :materia, :user_id)", dia_semana=request.form.get("dia_semana"), hora_inicio=request.form.get("hora_inicio"),hora_fin=request.form.get("hora_fin"), materia=request.form.get("materia"), user_id=session["user_id"])
-    user_schedules = db.execute("SELECT * FROM Horario WHERE user_id = :user_id", user_id=session["user_id"])
+        horarios = db.execute(
+            "INSERT INTO Horario (dia_semana, hora_inicio, hora_fin, materia, user_id) VALUES (:dia_semana,:hora_inicio, :hora_fin, :materia, :user_id)",
+            dia_semana=request.form.get("dia_semana"),
+            hora_inicio=request.form.get("hora_inicio"),
+            hora_fin=request.form.get("hora_fin"),
+            materia=request.form.get("materia"),
+            user_id=session["user_id"],
+        )
+    user_schedules = db.execute(
+        "SELECT * FROM Horario WHERE user_id = :user_id", user_id=session["user_id"]
+    )
 
-    # Render the template with the user's schedules
+    # Renderizar la plantilla con los horarios del usuario
     return render_template("horario.html", schedules=user_schedules)
 
 
@@ -159,69 +184,104 @@ def calificaciones():
             return redirect("/calificaciones")
 
         # Verificar si ya existe una calificación para la materia seleccionada
-        existing_calificacion = db.execute("SELECT id FROM calificaciones WHERE materia_id = :materia_id AND user_id = :user_id",
-        materia_id=materia_id, user_id=session["user_id"])
+        existing_calificacion = db.execute(
+            "SELECT id FROM calificaciones WHERE materia_id = :materia_id AND user_id = :user_id",
+            materia_id=materia_id,
+            user_id=session["user_id"],
+        )
 
         if existing_calificacion:
             return redirect("/calificaciones")
 
         # Insertar la nueva calificación en la base de datos
-        db.execute("INSERT INTO calificaciones (materia_id, calificacion, user_id) VALUES (:materia_id, :calificacion, :user_id)",
-                   materia_id=materia_id, calificacion=calificacion, user_id=session["user_id"])
+        db.execute(
+            "INSERT INTO calificaciones (materia_id, calificacion, user_id) VALUES (:materia_id, :calificacion, :user_id)",
+            materia_id=materia_id,
+            calificacion=calificacion,
+            user_id=session["user_id"],
+        )
 
         return redirect("/calificaciones")
 
     else:
         # Obtener la lista de materias del horario del usuario
-        materias = db.execute("SELECT id, materia FROM horario WHERE user_id = :user_id", user_id=session["user_id"])
+        materias = db.execute(
+            "SELECT id, materia FROM horario WHERE user_id = :user_id",
+            user_id=session["user_id"],
+        )
 
         # Obtener las calificaciones del usuario
         calificaciones = db.execute(
             "SELECT c.calificacion, h.materia FROM calificaciones c JOIN horario h ON c.materia_id = h.id WHERE c.user_id = :user_id",
-            user_id=session["user_id"])
+            user_id=session["user_id"],
+        )
 
-        return render_template("calificaciones.html", materias=materias, calificaciones=calificaciones)
+        return render_template(
+            "calificaciones.html", materias=materias, calificaciones=calificaciones
+        )
 
 
-#Ruta para anotaciones
+# Ruta para anotaciones
 @app.route("/anotaciones", methods=["GET", "POST"])
 @login_required
 def anotaciones():
-    if request.method=="POST":
+    if request.method == "POST":
         if not request.form.get("title"):
             return redirect("/anotaciones")
         if not request.form.get("content"):
             return redirect("/anotaciones")
-        notitas=db.execute("INSERT INTO anotaciones (titulo, contenido, user_id) VALUES (:titulo, :contenido, :user_id)", titulo=request.form.get("title"), contenido=request.form.get("content"), user_id=session["user_id"])
-    anotaciones = db.execute("SELECT id, titulo, contenido FROM anotaciones WHERE user_id = :user_id", user_id=session["user_id"])
+        notitas = db.execute(
+            "INSERT INTO anotaciones (titulo, contenido, user_id) VALUES (:titulo, :contenido, :user_id)",
+            titulo=request.form.get("title"),
+            contenido=request.form.get("content"),
+            user_id=session["user_id"],
+        )
+        flash("Anotación agregada con éxito.", "success")
+        return redirect("/anotaciones")
+    anotaciones = db.execute(
+        "SELECT id, titulo, contenido FROM anotaciones WHERE user_id = :user_id",
+        user_id=session["user_id"],
+    )
     return render_template("anotaciones.html", anotaciones=anotaciones)
 
 
-#Ruta para borrar anotaciones
+# Ruta para borrar anotaciones
 @app.route("/eliminar_anotacion/<int:anotacion_id>", methods=["POST"])
 @login_required
 def eliminar_anotacion(anotacion_id):
     # Obtener la anotación a eliminar
-    anotacion = db.execute("SELECT * FROM anotaciones WHERE id = :anotacion_id AND user_id = :user_id",
-    anotacion_id=anotacion_id, user_id=session["user_id"])
+    anotacion = db.execute(
+        "SELECT * FROM anotaciones WHERE id = :anotacion_id AND user_id = :user_id",
+        anotacion_id=anotacion_id,
+        user_id=session["user_id"],
+    )
 
     if anotacion:
         # Eliminar la anotación
-        db.execute("DELETE FROM anotaciones WHERE id = :anotacion_id", anotacion_id=anotacion_id)
+        db.execute(
+            "DELETE FROM anotaciones WHERE id = :anotacion_id",
+            anotacion_id=anotacion_id,
+        )
 
     return redirect("/anotaciones")
 
 
-#Ruta para la lista de tareas
+# Ruta para la lista de tareas
 @app.route("/tareas")
 @login_required
 def tareas():
     return render_template("tareas.html")
 
 
+#Funcion para validar la contraseña
+def validate_password(password):
+    if not regex.match(
+        r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
+        password,
+    ):
+        return False
+    return True
 
 
-
-if __name__=="__main__":    
+if __name__ == "__main__":
     app.run(debug=True)
-

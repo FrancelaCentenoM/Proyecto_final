@@ -5,7 +5,7 @@ body {
 }
 
 .card {
-  height: 400px;
+  height: 500px;
   width: 300px;
   background: #fff;
   font-family: Roboto;
@@ -76,7 +76,7 @@ body {
 }
 
 .header {
-  display: block;
+  display:contents;
   position: relative;
   font-size: 2em;
   color: #bf37ec;
@@ -261,4 +261,15 @@ body {
 
 .button:focus {
   outline: none;
+}
+
+
+/* Estilos adicionales para la imagen */
+.header-image {
+  display: block;
+  margin: 20px auto 10px;
+  width: 150px;
+  height: auto;
+  border-radius: 300px;
+  padding-top: 20px;
 }

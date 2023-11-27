@@ -12,9 +12,9 @@ h2 {
 
 form {
     max-width: 400px;
-    margin: 20px auto;  /* Alinea el formulario al centro horizontal */
+    margin: 20px auto; 
     padding: 20px;
-    background-color: #ADF6EF;
+    background: linear-gradient(135deg, #7bee97, #d964f7);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -25,8 +25,8 @@ form select,
 form input {
     display: block;
     margin-bottom: 15px;
-    width: 100%;  /* Ajusta el ancho al 100% para ocupar todo el contenedor */
-    box-sizing: border-box;  /* Incluye el padding y el borde en el ancho total */
+    width: 100%; 
+    box-sizing: border-box;  
 }
 
 form button {

@@ -11,10 +11,10 @@ section {
         transform: translateY(0);
     }
     40% {
-        transform: translateY(-30px);
+        transform: translateY(-20px); /* Ajusta el valor negativo para bajar las letras */
     }
     60% {
-        transform: translateY(-15px);
+        transform: translateY(-10px); /* Ajusta el valor negativo para bajar las letras */
     }
 }
 
@@ -24,5 +24,23 @@ section {
     color: #EFB288; /* Cambia el color según sea necesario */
     animation: bounce 2s infinite;
     text-align: center; /* Alinea el texto al centro */
+    margin-top: 20px; /* Ajusta el margen superior según sea necesario */
+}
+
+/* Estilos para pantallas más pequeñas (ej. móviles) */
+@media screen and (max-width: 768px) {
+    .animated-letters {
+        font-size: 1.8em; /* Ajusta el tamaño del texto para pantallas más pequeñas */
+        margin-top: 120px; /* Ajusta el margen superior para pantallas más pequeñas */
+        text-align: center;
+    }
+}
+
+/* Estilos para pantallas muy pequeñas (ej. dispositivos móviles) */
+@media screen and (max-width: 480px) {
+    .animated-letters {
+        font-size: 1.5em; /* Ajusta el tamaño del texto para pantallas muy pequeñas */
+        margin-top: 10px; /* Ajusta el margen superior para pantallas muy pequeñas */
+    }
 }
 

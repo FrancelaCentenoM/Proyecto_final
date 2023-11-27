@@ -1,29 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-*, *:before, *:after {
+
+*, *:before, *:after{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-body {
+body{
     font-family: 'Poppins', sans-serif;
 }
-
-.container {
+.container{
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(135deg, #7bee97, #d964f7);
+    background: #fff;
     padding: 10px;
     display: flex;
+    margin-top: -160px;
     justify-content: center;
     align-items: center;
 }
-
-.todo-app {
+.todo-app{
     width: 100%;
     max-width: 540px;
-    background-color: #fff;
+    background: linear-gradient(135deg, #7bee97, #d964f7);
     padding: 40px 30px 70px;
     border-radius: 10px;
     display: flex;
@@ -31,32 +30,26 @@ body {
     align-items: left;
     gap: 2rem;
 }
-
-.app-title {
+.app-title{
     display: flex;
     gap: 1rem;
     align-items: center;
 }
-
-.app-title h2,
-.app-title i {
+.app-title h2, .app-title i{
     color: #002765;
 }
-
-.app-title i {
+.app-title i{
     font-size: 26px;
 }
-
-.row {
+.row{
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #edeef0;
     border-radius: 30px;
 }
-
-.row input {
-    width: calc(100% - 60px); /* Ajuste para evitar que el estilo afecte el botón */
+input{
+    width: 100%;
     border: none;
     outline: none;
     background-color: transparent;
@@ -64,60 +57,55 @@ body {
     font-size: 17px;
     padding-left: 20px;
 }
-
-button {
+button{
     border: none;
     cursor: pointer;
     outline: none;
     padding: 15px 50px;
     border-radius: 30px;
-    background-color: #000000;
+    background-color: #ff5945;
     color: #fff;
     font-size: 18px;
     transition: all .25s ease;
 }
-
-button:hover {
+button:hover{
     filter: brightness(.8);
 }
 
 @media screen and (max-width: 400px) {
-    button {
+    button{
         padding: 15px;
         border-radius: 0 30px 30px 0;
     }
 }
 
-ul {
+ul{
     list-style: none;
 }
-
-ul li {
+ul li{
     font-size: 17px;
+    padding: 12px 8px 12px 50px;
+    margin-top: 5px;
     user-select: none;
     cursor: pointer;
     position: relative;
 }
-
-ul li::before {
+ul li::before{
     position: absolute;
     content: '';
     width: 24px;
     height: 24px;
     border-radius: 50%;
     left: 0;
-
+    border: 2px solid #ff5945;
 }
-
-ul .checked {
+ul .checked{
     color: #555;
     text-decoration: line-through;
 }
-
-ul .checked::before {
+ul .checked::before{
     background-color: #ff5945;
 }
-
 span {
     position: absolute;
     right: 0;
@@ -133,8 +121,7 @@ span {
     font-size: 18px;
     transition: all .2s ease;
 }
-
-span:hover {
+span:hover{
     background-color: #c9c9c9;
     color: #fff;
 }
