@@ -35,11 +35,11 @@ def login():
     if request.method == "POST":
         # Asegurarse de que se haya enviado un nombre de usuario
         if not request.form.get("username"):
-            return redirect("/")
+            return render_template("login.html", data="No ingresó un usuario")
 
         # Asegurarse de que se haya enviado una contraseña
         elif not request.form.get("password"):
-            return redirect("/")
+            return render_template("login.html", data="No ingresó una contraseña")
 
         # Consultar la base de datos para obtener el nombre de usuario
         rows = db.execute(
@@ -50,7 +50,7 @@ def login():
         if len(rows) != 1 or not check_password_hash(
             rows[0]["password"], request.form.get("password")
         ):
-            return redirect("/")
+            return render_template("login.html", data="Contraseña o usuario incorrecto")
 
         # Recordar qué usuario ha iniciado sesión
         session["user_id"] = rows[0]["id"]
@@ -80,15 +80,15 @@ def register():
         return redirect("/login")
 
     elif request.form.get("new_password") != request.form.get("confirmation"):
-        return redirect("/login")
+        return render_template("login.html", data="Las contraseñas no coiciden")
 
     elif not validate_password(request.form.get("new_password")):
-        return redirect("/login")
+        return render_template("login.html", data="La contraseña no es segura")
 
     # Validar el nombre de usuario
     new_username = request.form.get("new_username")
     if len(new_username) < 8 or not any(char.isdigit() for char in new_username):
-        return "error"
+        return render_template("login.html", data="El usuario debe llevar mínimo 8 caracteres y 1 número")
 
     # Verificar si el nombre de usuario ya existe
     rows = db.execute(
@@ -96,7 +96,7 @@ def register():
     )
 
     if len(rows) != 0:
-        return redirect("/login")
+        return render_template("login.html", data="El usuario ya existe")
 
     # Insertar el nuevo usuario en la base de datos
     db.execute(
@@ -160,6 +160,20 @@ def horario():
     return render_template("horario.html", schedules=user_schedules)
 
 
+#Ruta para borrar horario
+@app.route("/borrar_horario", methods=[ "POST"])
+@login_required
+def horario_borrar():
+    id_horario = request.form.get("id_materia") 
+    db.execute(
+            "DELETE FROM horario WHERE id = :id_materia",
+            id_materia=id_horario,
+        )
+    
+    return redirect('/horario')
+    
+
+
 # Ruta para ingresar calificaciones
 @app.route("/calificaciones", methods=["GET", "POST"])
 @login_required
@@ -220,6 +234,18 @@ def calificaciones():
             "calificaciones.html", materias=materias, calificaciones=calificaciones
         )
 
+
+#Ruta para borrar calificaciones
+@app.route("/borrar_calificaciones", methods=[ "POST"])
+@login_required
+def calificacion_borrar():
+    id_nota = request.form.get("id_calificacion") 
+    db.execute(
+            "DELETE FROM calificaciones WHERE id = :id_calificacion",
+            id_calificacion=id_nota,
+        )
+    
+    return redirect('/calificaciones')
 
 # Ruta para anotaciones
 @app.route("/anotaciones", methods=["GET", "POST"])

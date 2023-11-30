@@ -8,25 +8,35 @@ section {
 
 h2 {
     text-align: center;
+    text-decoration: underline rgb(4, 225, 225);
 }
 
 form {
     max-width: 400px;
     margin: 20px auto; 
     padding: 20px;
-    background: linear-gradient(135deg, #7bee97, #d964f7);
+    background-color: rgb(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgb(171, 88, 243);
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-form label,
 form select,
 form input {
     display: block;
     margin-bottom: 15px;
     width: 100%; 
-    box-sizing: border-box;  
+    box-sizing: border-box; 
+    border: 1px solid #818181;
+    border-radius: 4px;    
+}
+
+form label{
+    display: block;
+    margin-bottom: 15px;
+    width: 100%; 
+    box-sizing: border-box; 
+    border-radius: 4px;
 }
 
 form button {
@@ -43,13 +53,14 @@ table {
     width: 80%;
     margin: 20px auto;
     border-collapse: collapse;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgb(171, 88, 243);
 }
 
 table,
 th,
 td {
-    border: 1px solid #343a40;
+    border: 1px solid #818181;
+    
 }
 
 th,

@@ -12,16 +12,16 @@
 
 <body>
     <!-- Barra de Navegación -->
-    <div>
+    <div class="container_nav-links">
         <ul class="nav-links">
             <li><a href="/">Inicio</a></li>
             <li class="center"><a href="/horario">Horario</a></li>
             <li class="upward"><a href="/calificaciones">Calificaciones</a></li>
             <li class="forward"><a href="/anotaciones">Anotaciones</a></li>
-        <li class="forward"><a href="/tareas">Tareas</a></li>
-        <li class="forward"><a href="/logout">Cerrar sesión</a></li>
-        <li><img class="logo" src="/static/alely1.png" alt="hola" width="90px" height="auto"></li>
-    </ul>
+            <li class="forward"><a href="/tareas">Tareas</a></li>
+            <li class="forward"><a href="/logout">Cerrar sesión</a></li>
+            <li><img class="logo" src="/static/alely1.png" alt="hola" width="90px" height="auto"></li>
+        </ul>
     </div>
 
     <!-- Contenido de Tareas -->
@@ -35,7 +35,9 @@
                 <input type="text" id="input-box" placeholder="Agregar tareas">
                 <button>Agregar</button>
             </div>
-            <ul id="list-container"></ul>
+            <div class="circle">
+                <ul id="list-container" class="hola"></ul>
+            </div>
         </div>
     </div>
 
@@ -87,12 +89,3 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-

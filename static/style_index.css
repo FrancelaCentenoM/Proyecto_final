@@ -6,30 +6,38 @@ section {
     height: 100vh; /* O ajusta la altura según tus necesidades */
 }
 
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-20px); /* Ajusta el valor negativo para bajar las letras */
-    }
-    60% {
-        transform: translateY(-10px); /* Ajusta el valor negativo para bajar las letras */
-    }
+
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&family=Calligraffitti&display=swap');
+
+
+.letras {
+  width: 400px;
+  height: 450px;
+  font-family: 'Calligraffitti', cursive;
+  font-weight: 700;
+  font-size: 8rem;
+  position: absolute;
+  text-shadow: -15px 5px 20px #d1ced3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #ccd3f9;
+  text-shadow: 5px 5px 0px #A58FD4, 
+    10px 10px 0px   #7D26CD, 
+    15px 15px 0px  #770098, 
+    20px 20px 0px #b550ef, 
+    25px 25px 0px  #9368acfa, 
+    30px 30px 0px #c190e0;
 }
 
-.animated-letters {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #EFB288; /* Cambia el color según sea necesario */
-    animation: bounce 2s infinite;
-    text-align: center; /* Alinea el texto al centro */
-    margin-top: 20px; /* Ajusta el margen superior según sea necesario */
-}
+
 
 /* Estilos para pantallas más pequeñas (ej. móviles) */
 @media screen and (max-width: 768px) {
-    .animated-letters {
+    .letras {
         font-size: 1.8em; /* Ajusta el tamaño del texto para pantallas más pequeñas */
         margin-top: 120px; /* Ajusta el margen superior para pantallas más pequeñas */
         text-align: center;
@@ -38,9 +46,54 @@ section {
 
 /* Estilos para pantallas muy pequeñas (ej. dispositivos móviles) */
 @media screen and (max-width: 480px) {
-    .animated-letters {
+    .letras {
         font-size: 1.5em; /* Ajusta el tamaño del texto para pantallas muy pequeñas */
         margin-top: 10px; /* Ajusta el margen superior para pantallas muy pequeñas */
     }
 }
+
+/*estilo letra 2*/
+* {
+    margin: 0;
+    padding: 0;
+  }
+  
+
+  .pru {
+    font-weight: 700;
+    text-align: center;
+    font-size: 40px;
+    font-family: Hack, sans-serif;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #5e7676, rgb(108, 247, 247), #3a7f88);
+    letter-spacing: 4px;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    animation: shine 5s linear infinite;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1200px;
+    
+
+}
+
+.lccont{
+  margin-bottom: 30px;
+}
+
+  
+  @keyframes shine {
+    0% {
+      background-position-x: -500%;
+    }
+    100% {
+      background-position-x: 500%;
+    }
+  }
+
 

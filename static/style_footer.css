@@ -8,19 +8,20 @@ body {
 }
 
 footer {
-    background-color: #25b89f;
+    background-color: rgb(75, 215, 192, 0.4) ;
+    box-shadow: 0 0 10px rgb(171, 88, 243);
     color: #000000;
     text-align: center;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
-    margin-top: auto; 
+    margin-top: 50%; 
     padding-right: 354px;
     padding-left:  354px;
 }
 
 footer div {
-    width: 300px;
+    width: 370px;
     margin: 10px;
 }
 

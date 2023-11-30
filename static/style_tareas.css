@@ -12,21 +12,22 @@ body{
 .container{
     width: 100%;
     min-height: 100vh;
-    background: #fff;
     padding: 10px;
     display: flex;
-    margin-top: -160px;
     justify-content: center;
     align-items: center;
 }
 .todo-app{
     width: 100%;
     max-width: 540px;
-    background: linear-gradient(135deg, #7bee97, #d964f7);
+    background-color: rgb(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgb(171, 88, 243);
     padding: 40px 30px 70px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    height: 80vh;
+    overflow-y: auto; 
     align-items: left;
     gap: 2rem;
 }
@@ -34,6 +35,7 @@ body{
     display: flex;
     gap: 1rem;
     align-items: center;
+    text-decoration: underline rgb(4, 225, 225);
 }
 .app-title h2, .app-title i{
     color: #002765;
@@ -52,10 +54,11 @@ input{
     width: 100%;
     border: none;
     outline: none;
-    background-color: transparent;
     padding: 12px;
     font-size: 17px;
     padding-left: 20px;
+    border: 1px solid #818181;
+    border-radius: 4px;
 }
 button{
     border: none;
@@ -63,10 +66,12 @@ button{
     outline: none;
     padding: 15px 50px;
     border-radius: 30px;
-    background-color: #ff5945;
+    background-color: rgb(4, 225, 225);
     color: #fff;
     font-size: 18px;
     transition: all .25s ease;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
 }
 button:hover{
     filter: brightness(.8);
@@ -90,6 +95,17 @@ ul li{
     cursor: pointer;
     position: relative;
 }
+
+.container_nav-links ul li{
+    font-size: 17px;
+    margin-top: 5px;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: -60px;
+    padding: 0px;
+}
+
 ul li::before{
     position: absolute;
     content: '';
@@ -97,14 +113,23 @@ ul li::before{
     height: 24px;
     border-radius: 50%;
     left: 0;
-    border: 2px solid #ff5945;
+}
+
+.circle ul li::before{
+    position: absolute;
+    content: '';
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    left: 0;
+    border: 2px solid #01d0d0;
 }
 ul .checked{
     color: #555;
     text-decoration: line-through;
 }
 ul .checked::before{
-    background-color: #ff5945;
+    background-color: #f7220a;
 }
 span {
     position: absolute;
@@ -124,4 +149,14 @@ span {
 span:hover{
     background-color: #c9c9c9;
     color: #fff;
+}
+
+.hola ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+.hola li{
+    margin-right: 35px;
+    word-wrap: break-word;
 }

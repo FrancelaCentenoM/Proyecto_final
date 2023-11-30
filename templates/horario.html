@@ -8,11 +8,20 @@
     <link rel="stylesheet" href="/static/style_navbar.css">
     <link rel="stylesheet" href="/static/style_horario.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        /* Estilo para el contenedor de errores */
+        .contenedor_de_errores {
+            margin-top: 20px; /* Ajusta el margen superior según tus necesidades */
+            border: 2px solid #ff0000;
+            background-color: #ffecec;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body>
 
-    
     <!-- Barra de Navegación -->
     <ul class="nav-links">
         <li><a href="/">Inicio</a></li>
@@ -36,22 +45,36 @@
 
     <!-- Tabla de Horario -->
     <table>
-        <tr>
-            <th>Día Semana</th>
-            <th>Hora Inicio</th>
-            <th>Hora Fin</th>
-            <th>Materia</th>
-        </tr>
+    <tr>
+        <th>Día Semana</th>
+        <th>Hora Inicio</th>
+        <th>Hora Fin</th>
+        <th>Materia</th>
+    </tr>
+    {% if schedules %}
         {% for schedule in schedules %}
         <tr>
             <td>{{ schedule.dia_semana }}</td>
             <td>{{ schedule.hora_inicio }}</td>
             <td>{{ schedule.hora_fin }}</td>
             <td>{{ schedule.materia }}</td>
+            <td>
+
+                <form action="/borrar_horario" method="post">
+                    <input type="hidden" value="{{schedule.id}}" name="id_materia">
+                    <button type="submit">x</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="4">No hay datos en el horario.</td>
+        </tr>
+    {% endif %}
     </table>
 </body>
 
 </html>
+
 

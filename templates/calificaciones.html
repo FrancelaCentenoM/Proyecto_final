@@ -44,6 +44,12 @@
             <tr>
                 <td>{{ calificacion.materia }}</td>
                 <td>{{ calificacion.calificacion }}</td>
+                <td>
+                    <form action="/borrar_calificaciones" method="post">
+                        <input type="hidden" value="{{calificacion.id}}" name="id_calificacion">
+                        <button type="submit">x</button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     </table>
